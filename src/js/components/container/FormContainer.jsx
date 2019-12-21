@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Input from "../presentational/Input.jsx";
 import Select from 'react-select';
+import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+import DetailsPage from './DetailsPage.jsx';
+
 const axios = require('axios');
 var options = [];
 class FormContainer extends Component {
@@ -45,6 +48,10 @@ class FormContainer extends Component {
   })
   
   }
+
+  submit(){
+    this.props.router.push('/details')
+  }
   render() {
     const { max_age, zip_code, response,responseBreed } = this.state;
     if(response.length>0){
@@ -66,7 +73,26 @@ class FormContainer extends Component {
           options1.push(optionsBreed);
       }
     }
+    
+    const AboutPage = () => {
+      return (
+        <h3>About Page</h3>
+      );
+    };
     return (
+      <>
+        <Router>
+          <Link to="/about">Home</Link>
+          <Link to={{
+            pathname: "/details",
+            data: "data12345" // your data array of objects
+          }}>About</Link>
+          <Route path="/details" component={DetailsPage} />
+          <Route path="/about" component={AboutPage} />
+        </Router>
+      <div>
+        
+      </div>
       <form id="article-form">
         <Input
           text="Maximum Age"
@@ -106,8 +132,10 @@ class FormContainer extends Component {
           searchable={false} 
         />
         </div>
-        <button>animal</button>
+        <button onClick={this.submit}>animal</button>
       </form>
+
+      </>
     );
   }
 }
