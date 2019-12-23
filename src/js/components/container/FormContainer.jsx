@@ -2,8 +2,15 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Input from "../presentational/Input.jsx";
 import Select from 'react-select';
+<<<<<<< HEAD
 import axios from 'axios';
 
+=======
+import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+import DetailsPage from './DetailsPage.jsx';
+
+const axios = require('axios');
+>>>>>>> 756c6909470b077c4865313833cfbe676da31872
 var options = [];
 class FormContainer extends Component {
   constructor() {
@@ -46,6 +53,10 @@ class FormContainer extends Component {
   })
   
   }
+
+  submit(){
+    this.props.router.push('/details')
+  }
   render() {
     const { max_age, zip_code, response,responseBreed } = this.state;
     if(response.length>=0){
@@ -69,7 +80,26 @@ class FormContainer extends Component {
           options1.push(breedOptions);
       }
     }
+    
+    const AboutPage = () => {
+      return (
+        <h3>About Page</h3>
+      );
+    };
     return (
+      <>
+        <Router>
+          <Link to="/about">Home</Link>
+          <Link to={{
+            pathname: "/details",
+            data: "data12345" // your data array of objects
+          }}>About</Link>
+          <Route path="/details" component={DetailsPage} />
+          <Route path="/about" component={AboutPage} />
+        </Router>
+      <div>
+        
+      </div>
       <form id="article-form">
         <Input
           text="Maximum Age"
@@ -113,8 +143,14 @@ class FormContainer extends Component {
         />
         
         </div>
+<<<<<<< HEAD
          <button>submit</button>
+=======
+        <button onClick={this.submit}>animal</button>
+>>>>>>> 756c6909470b077c4865313833cfbe676da31872
       </form>
+
+      </>
     );
   }
 }
