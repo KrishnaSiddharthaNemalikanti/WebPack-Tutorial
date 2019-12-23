@@ -9,8 +9,9 @@ class Header extends Component {
     render() {
         return (
             <div className= "header">
-                <Link to="/">Home</Link>
-                <Link to="/details">About</Link>
+                <Link to="/home">New Search Form</Link>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <Link to="/details">Previous Results</Link>
             </div>
         );
     }

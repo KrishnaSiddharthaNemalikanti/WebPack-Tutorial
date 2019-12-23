@@ -109,63 +109,59 @@ class FormContainer extends Component {
         <Router>
             <Header/>
             <Switch>
-            <Route path="/details">
+            <Route path = "/details">
                 <DetailsPage zipCode = {this.state.zip_code}
                              maxAge = {this.state.max_age}
                              selectedAnimal = {this.state.selectedAnimal}
                              selectedBreed = {this.state.selectedBreed}/>
             </Route>
-            <Route path="/" component={AboutPage} />
+            <Route path = "/home">
+                <div>
+                    <Input
+                        text="Maximum Age"
+                        label="max_age"
+                        type="text"
+                        id="max_age"
+                        value={max_age}
+                        handleChange={this.handleChange}
+                    />
+                    <Input
+                        text="Zip Code"
+                        label="zip_code"
+                        type="text"
+                        id="zip_code"
+                        value={zip_code}
+                        handleChange={this.handleChange}
+                    />
+                    <div>
+                        <div><span>Animal</span></div>
+                        <Select
+                            name="form-field-name"
+                            value={this.state.brandSelect}
+                            options={options}
+                            placeholder="Select an animal"
+
+                            onChange={e => this.onSelectChanged(e)}
+
+                        />
+                    </div>
+                    <div>
+                        <div><span>Breed</span></div>
+                        <Select
+                            name="form-field-name"
+                            value={this.state.brandSelect}
+                            options={options1}
+                            placeholder="Select a Breed"
+                            searchable={false}
+                            onChange={e => this.onSelectChangedBreed(e)}
+                        />
+
+                    </div>
+                </div>
+                <button onClick={this.submit}>Submit</button>
+            </Route>
             </Switch>
         </Router>
-      <div>
-
-      </div>
-        <Input
-          text="Maximum Age"
-          label="max_age"
-          type="text"
-          id="max_age"
-          value={max_age}
-          handleChange={this.handleChange}
-        />
-        <Input
-          text="Zip Code"
-          label="zip_code"
-          type="text"
-          id="zip_code"
-          value={zip_code}
-          handleChange={this.handleChange}
-        />
-       <div>
-         <div><span>Animal</span></div>
-         <Select
-          name="form-field-name"
-          value={this.state.brandSelect}
-          options={options}
-          placeholder="Select an animal"
-
-          onChange={e => this.onSelectChanged(e)}
-
-        />
-       {/* to make the select tag required*/}
-
-        </div>
-
-        <div>
-         <div><span>Breed</span></div>
-         <Select
-          name="form-field-name"
-          value={this.state.brandSelect}
-          options={options1}
-          placeholder="Select a Breed"
-          searchable={false}
-          onChange={e => this.onSelectChangedBreed(e)}
-        />
-
-        </div>
-        <button onClick={this.submit}>animal</button>
-
       </>
     );
   }

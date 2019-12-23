@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { Redirect, BrowserRouter as Router, Route, withRouter , Switch} from 'react-router-dom';
+import FormContainer from "./FormContainer.jsx";
 
 const axios = require('axios');
 
@@ -23,7 +25,8 @@ class DetailsPage extends Component {
         axios.post(sql1, body).then(response => {
             console.log(response)
             const res = response.data.data
-            sessionStorage.setItem("prevResults", JSON.stringify(res))
+            if(res !== undefined && res.length>0)
+            {localStorage.setItem("prevResults", JSON.stringify(res))}
             this.setState(
                 {
                     detailsRequested: true,
@@ -33,19 +36,26 @@ class DetailsPage extends Component {
         })
     }
 
+    onClickRedirect() {
+        window.location.replace("/")
+    }
+
     render() {
-        if (this.state.detailsRequested == false || sessionStorage.getItem("prevResults") === 'undefined') {
+        if (this.state.detailsRequested == false || localStorage.getItem("prevResults") === undefined) {
             this.loadDetails()
         }
-        const prevResults = sessionStorage.getItem("prevResults")
+        const prevResults = localStorage.getItem("prevResults")
         console.log("prevResults",prevResults)
         const listItems = (prevResults !== 'undefined' ? JSON.parse(prevResults) : this.state.listOfItems).map((d) =>
-            <li key={d.id}>name: {d.name} age: {d.age} location: {d.location}
+            <li key={d.id}>name: {d.name} age: {d.age} location: {d.location}}
+                <br/>
                 <img src={'data:image/jpeg;base64,' + d.picture.data.toString('base64')}/>
             </li>);
         console.log("list of items in render page", listItems)
         return (
             <div>
+                <button onClick={this.onClickRedirect}>Redirect to Home Page</button>
+                <br/>
                 <span>List of available options for {this.props.selectedAnimal.toLowerCase()} and breed {this.props.selectedBreed.toLowerCase()}</span>
                 <ol>
                     {listItems}
