@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Input from "../presentational/Input.jsx";
 import Select from 'react-select';
-const axios = require('axios');
+import axios from 'axios';
+
 var options = [];
 class FormContainer extends Component {
   constructor() {
@@ -47,23 +48,25 @@ class FormContainer extends Component {
   }
   render() {
     const { max_age, zip_code, response,responseBreed } = this.state;
-    if(response.length>0){
+    if(response.length>=0){
+      var options = [];
       for(var i=0;i<response.length; i++) {
-        var options = [{
+        var aniamlOptions = {
             value: response[i].animal,
             label: response[i].animal
-          }];
+          };
+          options.push(aniamlOptions);
       }
-      
+     
     }
-    if(responseBreed.length>0){
+    if(responseBreed.length>=0){
       var options1 = [];
       for(var i=0;i<responseBreed.length; i++) {
-        var optionsBreed = {
+        var breedOptions = {
             value: responseBreed[i].breed,
             label: responseBreed[i].breed
           };
-          options1.push(optionsBreed);
+          options1.push(breedOptions);
       }
     }
     return (
@@ -86,14 +89,17 @@ class FormContainer extends Component {
         />
        <div>
          <div><span>Animal</span></div>
-         <Select
+         <Select 
           name="form-field-name"
           value={this.state.brandSelect}
           options={options}
-          placeholder="Select a brand"
-          searchable={false}
+          placeholder="Select an animal"
+          
           onChange={e => this.onSelectChanged(e)}
+          
         />
+       {/* to make the select tag required*/}
+         
         </div>
         
         <div>
@@ -105,8 +111,9 @@ class FormContainer extends Component {
           placeholder="Select a Breed"
           searchable={false} 
         />
+        
         </div>
-        <button>animal</button>
+         <button>submit</button>
       </form>
     );
   }
