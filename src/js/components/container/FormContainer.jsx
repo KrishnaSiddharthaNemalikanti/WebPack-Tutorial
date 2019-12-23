@@ -2,44 +2,50 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Input from "../presentational/Input.jsx";
 import Select from 'react-select';
-<<<<<<< HEAD
-import axios from 'axios';
-
-=======
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+import { Link, BrowserRouter as Router, Route, withRouter , Switch} from 'react-router-dom';
 import DetailsPage from './DetailsPage.jsx';
+import Header from './Header.jsx';
 
 const axios = require('axios');
->>>>>>> 756c6909470b077c4865313833cfbe676da31872
-var options = [];
+
 class FormContainer extends Component {
   constructor() {
     super();
     this.state = {
       zip_code: "",
       max_age: "",
-      animal: "",
+      selectedAnimal: "",
+        selectedBreed:"",
       response: [],
-      responseBreed: []
+      responseBreed: [],
+        redirectToDetails: false
     };
     this.handleChange = this.handleChange.bind(this);
+    this.submit = this.submit.bind(this);
   }
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value });
   }
   onSelectChanged(optionSelected) {
-    console.log(optionSelected)
+    console.log("option selected is :",optionSelected)
     let sql1 = "http://localhost:5000/getList?type=" + 'BREED' +"&animal="+optionSelected.value ;
     axios.get(sql1).then(response => {
       console.log(response)
       this.setState(
         {
+            selectedAnimal: optionSelected.value,
           responseBreed: response.data.data
         }
       )
-      console.log(this.state)
   })
   }
+    onSelectChangedBreed(optionSelected){
+        console.log("option selected is :",optionSelected)
+        this.setState(
+            {
+                selectedBreed: optionSelected.value
+            })
+    }
   componentDidMount(){
     let sql = "http://localhost:5000/getList?type=" + 'ANIMAL';
     axios.get(sql).then(response => {
@@ -51,24 +57,36 @@ class FormContainer extends Component {
       )
       console.log(this.state)
   })
-  
   }
 
   submit(){
-    this.props.router.push('/details')
+      console.log("submit", this.state)
+      this.setState(
+          {
+              redirectToDetails: true
+          }
+      )
   }
   render() {
-    const { max_age, zip_code, response,responseBreed } = this.state;
+    const { max_age, zip_code, response,responseBreed , redirectToDetails} = this.state;
+    console.log("redirect to details ",redirectToDetails)
+      if(redirectToDetails === true)
+      {
+          return <DetailsPage zipCode = {this.state.zip_code}
+                              maxAge = {this.state.max_age}
+                              selectedAnimal = {this.state.selectedAnimal}
+                              selectedBreed = {this.state.selectedBreed}/>
+      }
     if(response.length>=0){
       var options = [];
       for(var i=0;i<response.length; i++) {
-        var aniamlOptions = {
+        var animalOptions = {
             value: response[i].animal,
             label: response[i].animal
           };
-          options.push(aniamlOptions);
+          options.push(animalOptions);
       }
-     
+
     }
     if(responseBreed.length>=0){
       var options1 = [];
@@ -80,7 +98,7 @@ class FormContainer extends Component {
           options1.push(breedOptions);
       }
     }
-    
+
     const AboutPage = () => {
       return (
         <h3>About Page</h3>
@@ -89,18 +107,20 @@ class FormContainer extends Component {
     return (
       <>
         <Router>
-          <Link to="/about">Home</Link>
-          <Link to={{
-            pathname: "/details",
-            data: "data12345" // your data array of objects
-          }}>About</Link>
-          <Route path="/details" component={DetailsPage} />
-          <Route path="/about" component={AboutPage} />
+            <Header/>
+            <Switch>
+            <Route path="/details">
+                <DetailsPage zipCode = {this.state.zip_code}
+                             maxAge = {this.state.max_age}
+                             selectedAnimal = {this.state.selectedAnimal}
+                             selectedBreed = {this.state.selectedBreed}/>
+            </Route>
+            <Route path="/" component={AboutPage} />
+            </Switch>
         </Router>
       <div>
-        
+
       </div>
-      <form id="article-form">
         <Input
           text="Maximum Age"
           label="max_age"
@@ -119,19 +139,19 @@ class FormContainer extends Component {
         />
        <div>
          <div><span>Animal</span></div>
-         <Select 
+         <Select
           name="form-field-name"
           value={this.state.brandSelect}
           options={options}
           placeholder="Select an animal"
-          
+
           onChange={e => this.onSelectChanged(e)}
-          
+
         />
        {/* to make the select tag required*/}
-         
+
         </div>
-        
+
         <div>
          <div><span>Breed</span></div>
          <Select
@@ -139,21 +159,17 @@ class FormContainer extends Component {
           value={this.state.brandSelect}
           options={options1}
           placeholder="Select a Breed"
-          searchable={false} 
+          searchable={false}
+          onChange={e => this.onSelectChangedBreed(e)}
         />
-        
+
         </div>
-<<<<<<< HEAD
-         <button>submit</button>
-=======
         <button onClick={this.submit}>animal</button>
->>>>>>> 756c6909470b077c4865313833cfbe676da31872
-      </form>
 
       </>
     );
   }
 }
-export default FormContainer;  
+export default withRouter(FormContainer);
 const wrapper = document.getElementById("create-article-form");
-wrapper ? ReactDOM.render(<FormContainer />, wrapper) : false;
+wrapper ? ReactDOM.render(<Router><FormContainer /></Router>, wrapper) : false;

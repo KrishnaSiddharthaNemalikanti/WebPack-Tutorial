@@ -9,6 +9,7 @@
       {
         "loose": true
       }
-    ]
+    ],
+    ["@babel/transform-runtime"]
   ]
 }
