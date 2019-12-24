@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import { Redirect, BrowserRouter as Router, Route, withRouter , Switch} from 'react-router-dom';
-import FormContainer from "./FormContainer.jsx";
 
 const axios = require('axios');
 
@@ -23,7 +21,6 @@ class DetailsPage extends Component {
             age: this.props.maxAge
         };
         axios.post(sql1, body).then(response => {
-            console.log(response)
             const res = response.data.data
             if(res !== undefined && res.length>0)
             {localStorage.setItem("prevResults", JSON.stringify(res))}
@@ -45,13 +42,11 @@ class DetailsPage extends Component {
             this.loadDetails()
         }
         const prevResults = localStorage.getItem("prevResults")
-        console.log("prevResults",prevResults)
         const listItems = (prevResults !== 'undefined' ? JSON.parse(prevResults) : this.state.listOfItems).map((d) =>
             <li key={d.id}>name: {d.name} age: {d.age} location: {d.location}}
                 <br/>
                 <img src={'data:image/jpeg;base64,' + d.picture.data.toString('base64')}/>
             </li>);
-        console.log("list of items in render page", listItems)
         return (
             <div>
                 <button onClick={this.onClickRedirect}>Redirect to Home Page</button>

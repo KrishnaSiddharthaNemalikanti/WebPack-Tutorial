@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Input from "../presentational/Input.jsx";
 import Select from 'react-select';
-import { Link, BrowserRouter as Router, Route, withRouter , Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route, withRouter , Switch} from 'react-router-dom';
 import DetailsPage from './DetailsPage.jsx';
 import Header from './Header.jsx';
 
@@ -27,10 +27,8 @@ class FormContainer extends Component {
     this.setState({ [event.target.id]: event.target.value });
   }
   onSelectChanged(optionSelected) {
-    console.log("option selected is :",optionSelected)
     let sql1 = "http://localhost:5000/getList?type=" + 'BREED' +"&animal="+optionSelected.value ;
     axios.get(sql1).then(response => {
-      console.log(response)
       this.setState(
         {
             selectedAnimal: optionSelected.value,
@@ -40,7 +38,6 @@ class FormContainer extends Component {
   })
   }
     onSelectChangedBreed(optionSelected){
-        console.log("option selected is :",optionSelected)
         this.setState(
             {
                 selectedBreed: optionSelected.value
@@ -49,18 +46,15 @@ class FormContainer extends Component {
   componentDidMount(){
     let sql = "http://localhost:5000/getList?type=" + 'ANIMAL';
     axios.get(sql).then(response => {
-      console.log(response)
       this.setState(
         {
           response: response.data.data
         }
       )
-      console.log(this.state)
   })
   }
 
   submit(){
-      console.log("submit", this.state)
       this.setState(
           {
               redirectToDetails: true
@@ -69,7 +63,6 @@ class FormContainer extends Component {
   }
   render() {
     const { max_age, zip_code, response,responseBreed , redirectToDetails} = this.state;
-    console.log("redirect to details ",redirectToDetails)
       if(redirectToDetails === true)
       {
           return <DetailsPage zipCode = {this.state.zip_code}
