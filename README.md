@@ -4,7 +4,7 @@
 
 
 
-# WebPackTuts
+
 ```Steps to Run the App:```
 - Open the terminal on the UI Folder 
 - Run ``npm install``
